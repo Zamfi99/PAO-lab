@@ -16,4 +16,13 @@ public class Date {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         return dateFormat.format(date);
     }
+
+    public String outputForCSV() {
+        return this.getDate() + "\n";
+    }
+
+    public static Date createNewObject(String line) throws ParseException {
+        String[] object_data = line.split(",");
+        return new Date(object_data[0]);
+    }
 }

@@ -46,6 +46,15 @@ public class Location {
     }
 
     public String getLocation() {
-        return this.street_name + " " + this.street_number + ", " + this.city + ", " + this.country;
+        return this.street_number + "," + this.street_name + "," + this.city + "," + this.country;
+    }
+
+    public String outputForCSV() {
+        return this.street_number + "," + this.street_name + "," + this.city + "," + this.country + "\n";
+    }
+
+    public static Location createNewObject(String line) {
+        String[] object_data = line.split(",");
+        return new Location(Integer.parseInt(object_data[0]), object_data[1], object_data[2], object_data[3]);
     }
 }

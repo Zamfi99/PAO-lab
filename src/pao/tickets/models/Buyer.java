@@ -44,4 +44,15 @@ public class Buyer extends UserIdentity {
     public void setBalance(Integer amount) {
         this.balance -= amount;
     }
+
+    public String outputForCSV() {
+        return this.getUuid() + "," + this.getFirstName() + "," + this.getLastName() + "," + this.getBalance() + "\n";
+    }
+
+    public static Buyer createNewObject(String line) {
+        String[] object_data = line.split(",");
+        Buyer buyer = new Buyer(object_data[1], object_data[2]);
+        buyer.setBalance(Integer.parseInt(object_data[3]));
+        return buyer;
+    }
 }

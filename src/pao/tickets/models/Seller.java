@@ -23,4 +23,14 @@ public class Seller extends UserIdentity {
     public List<Event> getEvents() {
         return events;
     }
+
+    public String outputForCSV() {
+        return this.getUuid() + "," + this.getFirstName() + "," + this.getLastName() + "\n";
+    }
+
+    public static Seller createNewObject(String line) {
+        String[] object_data = line.split(",");
+        Seller seller = new Seller(object_data[1], object_data[2]);
+        return seller;
+    }
 }
