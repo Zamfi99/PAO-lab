@@ -145,8 +145,6 @@ public class UserService {
     }
 
     public static List<Event> getEvents(Seller seller) throws IOException {
-//        return events;
-
         writeLog("getEvents");
         return seller.getEvents();
     }

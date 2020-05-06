@@ -27,9 +27,6 @@ public class FileHandler implements FileHandlerInterface {
 
     public void reinitializeWriter() throws IOException {
         this.fileWriter.flush();
-
-//        this.closeWriter();
-//        this.fileWriter = new FileWriter(this.fileName, true);
     }
 
     @Override
@@ -44,7 +41,6 @@ public class FileHandler implements FileHandlerInterface {
         try {
             br = new BufferedReader(this.fileReader);
             while ((line = br.readLine()) != null) {
-//                String[] object_data = line.split(splitter);
                 objects.add((Object) method.invoke(object, line));
             }
         } catch (IOException e) {
