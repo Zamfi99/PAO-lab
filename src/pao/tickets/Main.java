@@ -19,10 +19,7 @@ public class Main {
         UserService.initialize();
 
         Buyer buyer = UserService.addBuyer("Popescu", "sIons");
-//        Seller seller = UserService.addSeller("Ionescu", "Pop");
-//        Location location = UserService.addLocation(47, "Progresului", "Curtea de Arges", "Romania");
-//        Date date = UserService.addDate("2020-05-30 20:15");
-//        Event event = UserService.addEvent(location, date, "Eveniment 1", 300, 15);
+        Seller seller = UserService.addSeller("Ionescu", "Pop");
 
         UserService.close();
     }

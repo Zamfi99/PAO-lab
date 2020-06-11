@@ -14,7 +14,6 @@ public class Connect {
                 String url = "jdbc:sqlite:/Users/zamfiracostin-andrei/Desktop/PAO - facultate/identifier.sqlite";
                 conn = DriverManager.getConnection(url);
 
-                System.out.println("Connection to SQLite has been established.");
             } catch (SQLException e) {
                 conn = null;
                 System.out.println(e.getMessage());
