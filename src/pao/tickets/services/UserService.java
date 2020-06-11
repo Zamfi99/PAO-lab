@@ -157,13 +157,59 @@ public class UserService {
         return location;
     }
 
+//    public static Event addEvent(Location location, Date date, String eventName, Integer capacity, Integer price) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, ParseException {
+        Event event = new Event(location, date, eventName, capacity, price);
+//        events.add(event);
+//        FileHandler eventHandler = FileManager.instance(Event.class);
+//        eventHandler.write(event);
+//        writeLog("addEvent");
+//        return event;
+//    }
+
     public static Event addEvent(Location location, Date date, String eventName, Integer capacity, Integer price) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, ParseException {
+
         Event event = new Event(location, date, eventName, capacity, price);
         events.add(event);
-        FileHandler eventHandler = FileManager.instance(Event.class);
-        eventHandler.write(event);
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("INSERT INTO event (location, `date`, eventName, capacity, ticketsSelled, price) VALUES (" + event.toSQL() + ")");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         writeLog("addEvent");
         return event;
+    }
+
+    public static void updateEvent(int id, int location_id, String date, String eventName, int capacity, int ticketsSelled, int price) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("UPDATE event SET " +
+                    "location='" + location_id + "' date='" + date + "' eventName='" + eventName + "' " +
+                    "capacity='" + capacity + "' ticketsSelled='" + ticketsSelled + "' price='" + price + "' " +
+                    "WHERE id=" + id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static ResultSet getEvent(int id) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+
+            return stmt.executeQuery("SELECT * FROM event WHERE id=" + id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static void deleteEvent(int id) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("DELETE FROM event WHERE id=" + id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public static String buyTicket(Buyer buyer, Event event) throws IOException {

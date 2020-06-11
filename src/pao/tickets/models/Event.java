@@ -55,6 +55,12 @@ public class Event extends BaseEvent {
         return this.getId().toString() + "," + this.getLocation().getLocation() + "," + this.getDate().getDate() + "," + this.getEventName() + "," + this.getCapacity() + "," + this.getTicketsSelled() + "," + this.getPrice() + "\n";
     }
 
+    public String toSQL() {
+        return "'" + this.getLocation().getLocation() + "'" + ", " + "'" + this.getDate().getDate() + "'" + ", " + "'"
+                + this.getEventName() + "'" + ", " + "'" + this.getCapacity() + "'" + ", " + "'" + this.getCapacity()
+                + "'" + ", " + "'" + this.getTicketsSelled() + "'" + ", " + "'" + this.getPrice() + "'";
+    }
+
     public static Event createNewObject(String line) throws ParseException {
         String[] object_data = line.split(",");
         Location location = new Location(Integer.parseInt(object_data[1]), object_data[2], object_data[3], object_data[4]);
