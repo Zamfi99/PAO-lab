@@ -157,14 +157,6 @@ public class UserService {
         return location;
     }
 
-//    public static Event addEvent(Location location, Date date, String eventName, Integer capacity, Integer price) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, ParseException {
-        Event event = new Event(location, date, eventName, capacity, price);
-//        events.add(event);
-//        FileHandler eventHandler = FileManager.instance(Event.class);
-//        eventHandler.write(event);
-//        writeLog("addEvent");
-//        return event;
-//    }
 
     public static Event addEvent(Location location, Date date, String eventName, Integer capacity, Integer price) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, ParseException {
 
