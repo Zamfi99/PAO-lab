@@ -24,6 +24,10 @@ public class Seller extends UserIdentity {
         return events;
     }
 
+    public String toSQL() {
+        return "'" + this.getFirstName() + "'" +  "," + "'" +  this.getLastName() + "'";
+    }
+
     public String outputForCSV() {
         return this.getUuid() + "," + this.getFirstName() + "," + this.getLastName() + "\n";
     }

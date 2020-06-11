@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class UserService {
     public static FileWriter logger;
@@ -54,13 +56,87 @@ public class UserService {
         logger.close();
     }
 
-    public static Buyer addBuyer(String firstName, String lastName) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public static Ticket addTicket(Event event) {
+        Ticket ticket = new Ticket(event);
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("INSERT INTO ticket (event) VALUES (" + ticket.toSQL() + ")");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return ticket;
+    }
+
+    public static void updateTicket(int id, Event event) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("UPDATE ticket SET event=" + event.getId() + " WHERE id=" + id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static ResultSet getTicket(int id) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+
+            return stmt.executeQuery("SELECT * FROM ticket WHERE id=" + id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static void deleteTicket(int id) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("DELETE FROM ticket WHERE id=" + id);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static Buyer addBuyer(String firstName, String lastName) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, SQLException {
+
         Buyer buyer = new Buyer(firstName, lastName);
         buyers.add(buyer);
-        FileHandler buyerHandler = FileManager.instance(Buyer.class);
-        buyerHandler.write(buyer);
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("INSERT INTO buyer (firstName, lastName, balance) VALUES (" + buyer.toSQL() + ")");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         writeLog("addBuyer");
         return buyer;
+    }
+
+    public static void updateBuyer(int uuid, String firstName, String lastName, int balance, String tickets) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("UPDATE buyer SET firstName='" + firstName + "' lastName='" + lastName + "' balance=" + balance + " tickets='" + tickets + "' WHERE uuid=" + uuid);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static ResultSet getBuyer(int uuid) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+
+            return stmt.executeQuery("SELECT * FROM buyer WHERE uuid=" + uuid);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static void deleteBuyer(int uuid) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("DELETE FROM buyer WHERE uuid=" + uuid);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public static Date addDate(String dateString) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, ParseException {
@@ -96,7 +172,7 @@ public class UserService {
             if (event.getCapacity() > event.getTicketsSelled()) {
                 Ticket ticket = new Ticket(event);
                 event.incrementTicketsSold();
-                ticket.setTicketNumber(event.getTicketsSelled());
+                ticket.setId(event.getTicketsSelled());
                 buyer.addTicket(ticket);
                 buyer.setBalance(event.getPrice());
                 return "Biletul a fost cumparat cu succes";
@@ -116,7 +192,7 @@ public class UserService {
                 for (int i = 0; i < tickets; i++) {
                     Ticket ticket = new Ticket(event);
                     event.incrementTicketsSold();
-                    ticket.setTicketNumber(event.getTicketsSelled());
+                    ticket.setId(event.getTicketsSelled());
                     buyer.addTicket(ticket);
                     buyer.setBalance(event.getPrice());
                 }
@@ -132,11 +208,44 @@ public class UserService {
 
     public static Seller addSeller(String firstName, String lastName) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Seller seller = new Seller(firstName, lastName);
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("INSERT INTO seller (firstName, lastName) VALUES (" + seller.toSQL() + ")");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         sellers.add(seller);
-        FileHandler sellerHandler = FileManager.instance(Seller.class);
-        sellerHandler.write(seller);
         writeLog("addSeller");
         return seller;
+    }
+
+    public static void updateSeller(int uuid, String firstName, String lastName, String events) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("UPDATE buyer SET firstName='" + firstName + "' lastName='" + lastName + "' events='" + events + "' WHERE uuid=" + uuid);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static ResultSet getSeller(int uuid) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+
+            return stmt.executeQuery("SELECT * FROM seller WHERE uuid=" + uuid);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public static void deleteSeller(int uuid) {
+        try {
+            Statement stmt = Connect.instance().createStatement();
+            stmt.execute("DELETE FROM seller WHERE uuid=" + uuid);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public static void addEventForSeller(Seller seller, Event event) throws IOException {

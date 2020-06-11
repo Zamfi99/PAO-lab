@@ -2,7 +2,7 @@ package pao.tickets.models;
 
 public class Ticket {
     private Event event;
-    private Integer ticketNumber;
+    private Integer id;
 
     public Ticket(Event event) {
         this.event = event;
@@ -12,11 +12,15 @@ public class Ticket {
         return event;
     }
 
-    public Integer getTicketNumber() {
-        return ticketNumber;
+    public Integer getId() {
+        return id;
     }
 
-    public void setTicketNumber(Integer ticketNumber) {
-        this.ticketNumber = ticketNumber;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer toSQL() {
+        return this.event.getId();
     }
 }

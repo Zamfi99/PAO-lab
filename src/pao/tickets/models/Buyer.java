@@ -49,6 +49,10 @@ public class Buyer extends UserIdentity {
         return this.getUuid() + "," + this.getFirstName() + "," + this.getLastName() + "," + this.getBalance() + "\n";
     }
 
+    public String toSQL() {
+        return "'" + this.getFirstName() + "'" +  "," + "'" +  this.getLastName() + "'" +  "," + this.getBalance();
+    }
+
     public static Buyer createNewObject(String line) {
         String[] object_data = line.split(",");
         Buyer buyer = new Buyer(object_data[1], object_data[2]);
